@@ -1,0 +1,22 @@
+# Ignore .env file in the backend folder
+/backend/.env
+
+# Ignore node_modules folder in the backend folder
+/backend/node_modules/
+
+# System files and folders to ignore (optional but recommended)
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Other environment files (optional)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
