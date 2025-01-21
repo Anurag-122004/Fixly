@@ -1,9 +1,7 @@
-// filepath: backend/src/app.js
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -14,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(express.json());
+app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 
 // Routes
 const authRoutes = require('./src/routes/authRoutes');
