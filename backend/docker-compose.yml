@@ -1,0 +1,13 @@
+# filepath: backend/docker-compose.yml
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb+srv://ak:1234@cluster0.rmp3cs4.mongodb.net/urban-solver?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=6Z5BOG5EkCHtTOFKljqzeqmMAQ7fq8OuBg3PESA8qF8
+    
