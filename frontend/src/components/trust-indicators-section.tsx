@@ -15,7 +15,14 @@ const TrustIndicatorsSection = () => {
         <div className="flex flex-wrap justify-center items-center gap-8">
           {partners.map((partner) => (
             <div key={partner.name} className="w-40 h-20 relative">
-              <Image src={partner.logo || "/placeholder.svg"} alt={partner.name} layout="fill" objectFit="contain" />
+              {/* Use style prop for object-fit */}
+              <Image
+                src={partner.logo || "/placeholder.svg"}
+                alt={partner.name}
+                width={160}  // Specify the width
+                height={80}  // Specify the height
+                style={{ objectFit: "contain" }}  // Apply object-fit using the style prop
+              />
             </div>
           ))}
         </div>
@@ -25,4 +32,3 @@ const TrustIndicatorsSection = () => {
 }
 
 export default TrustIndicatorsSection
-
