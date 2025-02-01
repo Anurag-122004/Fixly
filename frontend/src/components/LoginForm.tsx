@@ -10,6 +10,7 @@ import { Checkbox } from "@/app/components/ui/checkbox"
 import { Label } from "@/app/components/ui/label"
 import { useAuth } from "@/hooks/useAuth"
 import { SocialLoginButton } from "./SocialLoginButton"
+import Link from "next/link"
 
 interface LoginFormData {
     email: string
@@ -123,12 +124,9 @@ interface LoginFormData {
                 Remember me
             </Label>
             </div>
-            <a
-            href="#"
-            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
-            >
+            <Link href="/reset-password" className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200">
             Forgot password?
-            </a>
+            </Link>
         </div>
 
         <Button

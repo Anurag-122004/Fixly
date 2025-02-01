@@ -1,4 +1,4 @@
-const stripe = require('../backend/src/config/stripe');
+const stripe = require('../config/stripe');
 
 const processPayment = async (transaction) => {
     try {

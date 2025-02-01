@@ -8,9 +8,10 @@ const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const app = express();
+const allowedOrigins = ['http://localhost:5173' ]
 
 // Middleware
-app.use(cors());
+app.use(cors({origin : allowedOrigins,credentials: true }));
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));

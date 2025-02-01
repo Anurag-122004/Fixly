@@ -6,19 +6,19 @@ import { useAuth } from "@/hooks/useAuth"
 import type React from "react" // Added import for React
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
-    const { isLoggedIn } = useAuth()
-    const router = useRouter()
+  const { isLoggedIn } = useAuth()
+  const router = useRouter()
 
-    useEffect(() => {
-        if (!isLoggedIn) {
-        router.push("/login")
-        }
-    }, [isLoggedIn, router])
-
+  useEffect(() => {
     if (!isLoggedIn) {
-        return null
+      router.push("/login")
     }
+  }, [isLoggedIn, router])
 
-    return <>{children}</>
+  if (!isLoggedIn) {
+    return null
+  }
+
+  return <>{children}</>
 }
 

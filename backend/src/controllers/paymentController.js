@@ -1,5 +1,5 @@
 const Transaction = require('../models/Transaction');
-const { processPayment } = require('../../../services/paymentService');
+const { processPayment } = require('../services/paymentService');
 const stripe = require('../config/stripe');
 
 exports.createPayment = async (req, res) => {

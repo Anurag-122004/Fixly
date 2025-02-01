@@ -1,24 +1,36 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/app/components/ui/button"
 import { ModeToggle } from "./ModeToggle"
 import { useAuth } from "@/hooks/useAuth"
+import { ChevronDown } from "lucide-react"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { isLoggedIn, logout } = useAuth()
   const router = useRouter()
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const handleAuthAction = () => {
-    if (isLoggedIn) {
-      logout()
-      router.push("/") // Redirect to landing page
-    } else {
-      router.push("/login") // Redirect to login page
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
     }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    logout()
+    router.push("/") // Redirect to landing page
   }
 
   return (
@@ -76,7 +88,38 @@ const Header = () => {
           </nav>
           <div className="hidden md:flex items-center space-x-4">
             <ModeToggle />
-            <Button onClick={handleAuthAction}>{isLoggedIn ? "Log Out" : "Log In"}</Button>
+            {isLoggedIn ? (
+              <div className="relative" ref={dropdownRef}>
+                <Button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center space-x-2">
+                  <span>Account</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? "rotate-180" : ""}`} />
+                </Button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Profile
+                    </Link>
+                    <Link
+                      href="/email-verification"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Email Verification
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button onClick={() => router.push("/login")}>Log In</Button>
+            )}
           </div>
           <div className="md:hidden">
             <button
@@ -128,11 +171,29 @@ const Header = () => {
             >
               Contact
             </Link>
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 space-y-2">
               <ModeToggle />
-              <Button className="w-full" onClick={handleAuthAction}>
-                {isLoggedIn ? "Log Out" : "Log In"}
-              </Button>
+              {isLoggedIn ? (
+                <>
+                  <Link href="/profile" className="block w-full">
+                    <Button variant="outline" className="w-full justify-start">
+                      Profile
+                    </Button>
+                  </Link>
+                  <Link href="/email-verification" className="block w-full">
+                    <Button variant="outline" className="w-full justify-start">
+                      Email Verification
+                    </Button>
+                  </Link>
+                  <Button onClick={handleLogout} className="w-full">
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Button onClick={() => router.push("/login")} className="w-full">
+                  Log In
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -142,3 +203,4 @@ const Header = () => {
 }
 
 export default Header;
+
