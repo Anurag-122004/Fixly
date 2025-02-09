@@ -1,56 +1,68 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PropTypes from 'prop-types';
+
 export const AppContent = createContext();
 
 export const AppContextProvider = (props) => {
-
     axios.defaults.withCredentials = true;
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-    const [isLoggedin , setIsLoggedin] = useState(false);
-    const [userData, setUserData] = useState(false);
+    const [isLoggedin, setIsLoggedin] = useState(false);
+    const [userData, setUserData] = useState(null);
 
     const getAuthState = async () => {
         try {
-            const {data} = await axios.get(`${backendUrl}/auth/is-auth`)
+        const { data } = await axios.get(`${backendUrl}/auth/is-auth`);
 
-            if (data.success ) {
-                setIsLoggedin(true);
-                getUserData();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message)
+        if (data.success) {
+            setIsLoggedin(true);
+            getUserData();
+        } else {
+            setIsLoggedin(false);
+            setUserData(null);
         }
-    }
+        } catch (error) {
+        console.log(error);
+        toast.error(error.message);
+    };
+    
+    AppContextProvider.propTypes = {
+        children: PropTypes.node.isRequired,
+    };
+    };
 
     const getUserData = async () => {
         try {
-            const {data} = await axios.get(`${backendUrl}/users/data`)
-            data.success ? setUserData(data.userData) : toast.error(data.message)
-        } catch (error) {
-            console.log(error);
-            toast.error(error.message);
+        const { data } = await axios.get(`${backendUrl}/users/data`);
+        if (data.success) {
+            setUserData(data.userData);
+        } else {
+            toast.error(data.message);
         }
-    }
+        } catch (error) {
+        console.log(error);
+        toast.error(error.message);
+        }
+    };
 
     useEffect(() => {
         getAuthState();
     }, []);
-    
+
     const value = {
         backendUrl,
         isLoggedin,
         setIsLoggedin,
         userData,
         setUserData,
-        getUserData
+        getUserData,
+    };
 
-    }
     return (
         <AppContent.Provider value={value}>
-            {props.children}
+        {props.children}
         </AppContent.Provider>
-    )
-}
+    );
+};

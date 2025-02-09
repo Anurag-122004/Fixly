@@ -7,13 +7,19 @@ import EmailVerify from './pages/EmailVerify';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './pages/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
+
 
 const App = () => {
   return (
     <div>
       <ToastContainer />
       <Routes>
-        <Route path='/' element={<LandingPage/>} />
+        <Route path='/' element={
+            <PrivateRoute>
+              <LandingPage />
+            </PrivateRoute>
+          } />
         <Route path='/login' element={<Login/>} />
         <Route path='/dashboard' element={<Dashboard/>} />
         <Route path='/email-verify' element={<EmailVerify/>} />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import { AppContent } from '../context/AppContext';
@@ -22,9 +22,11 @@ const Login = () => {
         const {data} = await axios.post(`${backendUrl}/auth/register`, {name, email, password});
         console.log(data);
         if (data.success) {
+          toast.success(data.message);
           setIsLoggedin(true);
           getUserData();
           navigate('/dashboard');
+
         } else {
           toast.error(data.message);
         }
@@ -32,6 +34,7 @@ const Login = () => {
         const {data} = await axios.post(`${backendUrl}/auth/login`, {email, password});
         console.log(data);
         if (data.success) {
+          toast.success(data.message);
           setIsLoggedin(true);
           getUserData();
           navigate('/dashboard');
